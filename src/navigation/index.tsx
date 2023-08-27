@@ -9,18 +9,19 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 /**
  * ? Local & Shared Imports
  */
-import { SCREENS } from "@shared-constants";
+import { RootStackParamList, SCREENS } from "@shared-constants";
 import { DarkTheme, LightTheme, palette } from "@theme/themes";
 // ? Screens
 import HomeScreen from "@screens/home/HomeScreen";
 import SearchScreen from "@screens/search/SearchScreen";
-import DetailScreen from "@screens/detail/DetailScreen";
 import ProfileScreen from "@screens/profile/ProfileScreen";
 import NotificationScreen from "@screens/notification/NotificationScreen";
+import SplashScreen from "@screens/SplashScreen";
+import OnboardingScreens from "@screens/onboarding";
 
 // ? If you want to use stack or tab or both
-const Tab = createBottomTabNavigator();
-const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator<RootStackParamList>();
+const Stack = createStackNavigator<RootStackParamList>();
 
 const Navigation = () => {
   const scheme = useColorScheme();
@@ -97,11 +98,19 @@ const Navigation = () => {
       }}
       theme={isDarkMode ? DarkTheme : LightTheme}
     >
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator
+        screenOptions={{ headerShown: false }}
+        initialRouteName={SCREENS.SPLASHSCREEN}
+      >
         <Stack.Screen name={SCREENS.HOME} component={renderTabNavigation} />
-        <Stack.Screen name={SCREENS.DETAIL}>
-          {(props) => <DetailScreen {...props} />}
-        </Stack.Screen>
+        <Stack.Screen name={SCREENS.SPLASHSCREEN} component={SplashScreen} />
+        {OnboardingScreens.map((m, i) => (
+          <Stack.Screen
+            key={`${m.screen}-${i}`}
+            name={m.screen}
+            component={m.component as any}
+          />
+        ))}
       </Stack.Navigator>
     </NavigationContainer>
   );

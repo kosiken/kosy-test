@@ -2,76 +2,148 @@
   "migIndex": 1,
   "data": [
     {
-      "path": "src/assets/fonts/Montserrat/Montserrat-Black.ttf",
-      "sha1": "d6efdc8c120df6af92ad5836c150bcbdac58b44e"
+      "path": "src/assets/fonts/DMSans/DMSans-Black.ttf",
+      "sha1": "c3ad43927dffa6747ee77329a9bd5465557030ad"
     },
     {
-      "path": "src/assets/fonts/Montserrat/Montserrat-BlackItalic.ttf",
-      "sha1": "5ebf61d6abc52feafe972df8a4c06f120f401fe0"
+      "path": "src/assets/fonts/DMSans/DMSans-BlackItalic.ttf",
+      "sha1": "84905475a1a4288a4245f057041025ce1a7fc699"
     },
     {
-      "path": "src/assets/fonts/Montserrat/Montserrat-Bold.ttf",
-      "sha1": "97e2be433a5c4f622112b723d9ea9a23df6338f4"
+      "path": "src/assets/fonts/DMSans/DMSans-Bold.ttf",
+      "sha1": "5987ba6a8b8c8cc7f755431eca614ea7f5de1b96"
     },
     {
-      "path": "src/assets/fonts/Montserrat/Montserrat-BoldItalic.ttf",
-      "sha1": "98cfe7692bfc754c2007b3689a8e81e739a06ea1"
+      "path": "src/assets/fonts/DMSans/DMSans-BoldItalic.ttf",
+      "sha1": "cabe1136376455d59e3abb30e83d61c48cc6d73b"
     },
     {
-      "path": "src/assets/fonts/Montserrat/Montserrat-ExtraBold.ttf",
-      "sha1": "7ca2cd2eae0ed0c291a02296d7467ce0cad64afc"
+      "path": "src/assets/fonts/DMSans/DMSans-ExtraBold.ttf",
+      "sha1": "aa2e6e4a205e0ef5905506b1468ac020259f0bd4"
     },
     {
-      "path": "src/assets/fonts/Montserrat/Montserrat-ExtraBoldItalic.ttf",
-      "sha1": "6c35f02984850f923c8193e46922c957c3c55964"
+      "path": "src/assets/fonts/DMSans/DMSans-ExtraBoldItalic.ttf",
+      "sha1": "5384429f8f8e86a5b093c3ea3faf7ac27bfb5cac"
     },
     {
-      "path": "src/assets/fonts/Montserrat/Montserrat-ExtraLight.ttf",
-      "sha1": "0045e8ed82ec04dcf83f2330ab7cdaa7d5f65b84"
+      "path": "src/assets/fonts/DMSans/DMSans-ExtraLight.ttf",
+      "sha1": "54d66cca40d54d1ecbf9e134d63fe0b67410bd5e"
     },
     {
-      "path": "src/assets/fonts/Montserrat/Montserrat-ExtraLightItalic.ttf",
-      "sha1": "f870c8ddb9d780ffb374a2dbf0031cb23121c438"
+      "path": "src/assets/fonts/DMSans/DMSans-ExtraLightItalic.ttf",
+      "sha1": "3bcb6fdc7ebc93deb5285efc01abb55de22066d5"
     },
     {
-      "path": "src/assets/fonts/Montserrat/Montserrat-Italic.ttf",
-      "sha1": "a60d6f00e83110d2bc0d828af0d5f57d137d979f"
+      "path": "src/assets/fonts/DMSans/DMSans-Italic.ttf",
+      "sha1": "2aef53d3a308dc93e5018814b71ee80e5ced5fea"
     },
     {
-      "path": "src/assets/fonts/Montserrat/Montserrat-Light.ttf",
-      "sha1": "3571554641eb70658156b4f3705057a9cd380c7b"
+      "path": "src/assets/fonts/DMSans/DMSans-Light.ttf",
+      "sha1": "52d4f475534271ece8eb846df8e8177664ec7fb4"
     },
     {
-      "path": "src/assets/fonts/Montserrat/Montserrat-LightItalic.ttf",
-      "sha1": "805aac14f1b0345f6994206413b29fcebbc1d8d6"
+      "path": "src/assets/fonts/DMSans/DMSans-LightItalic.ttf",
+      "sha1": "c8cd2944d89276239937c19fb17e270ae96d6da5"
     },
     {
-      "path": "src/assets/fonts/Montserrat/Montserrat-Medium.ttf",
-      "sha1": "6fd70300b7e19aa191a5eb06dc0374c46ca97dcb"
+      "path": "src/assets/fonts/DMSans/DMSans-Medium.ttf",
+      "sha1": "00ea5b83c109e751b844413d32e21b7689bf786d"
     },
     {
-      "path": "src/assets/fonts/Montserrat/Montserrat-MediumItalic.ttf",
-      "sha1": "87044a5e426a6ebdc6880ea012ebf6f0c1281b09"
+      "path": "src/assets/fonts/DMSans/DMSans-MediumItalic.ttf",
+      "sha1": "243a414ba24f8c283e5a709827202dcd71d302c8"
     },
     {
-      "path": "src/assets/fonts/Montserrat/Montserrat-Regular.ttf",
-      "sha1": "6b81c92b065c20c37190d983a79fa38cf6e60552"
+      "path": "src/assets/fonts/DMSans/DMSans-Regular.ttf",
+      "sha1": "ac9a042a40e49e8cdbfe0e64e84d9b1c5724e98d"
     },
     {
-      "path": "src/assets/fonts/Montserrat/Montserrat-SemiBold.ttf",
-      "sha1": "201ccee5dcb1e9d38716168f3a56598a6808ed51"
+      "path": "src/assets/fonts/DMSans/DMSans-SemiBold.ttf",
+      "sha1": "c2c26e18339912a10d796aee9a19ce1aff5177e4"
     },
     {
-      "path": "src/assets/fonts/Montserrat/Montserrat-SemiBoldItalic.ttf",
-      "sha1": "464d0c754c76241288c3d792a11f13bde9a927dc"
+      "path": "src/assets/fonts/DMSans/DMSans-SemiBoldItalic.ttf",
+      "sha1": "256d4e7849f838529fa84bd5cf93b2a006b5253e"
     },
     {
-      "path": "src/assets/fonts/Montserrat/Montserrat-Thin.ttf",
-      "sha1": "32564a6e35f7ff6c4a66fa493f5174aee3cc3ca6"
+      "path": "src/assets/fonts/DMSans/DMSans-Thin.ttf",
+      "sha1": "b2a7f12606cc99225f0d890d97a7e7c099fdaa03"
     },
     {
-      "path": "src/assets/fonts/Montserrat/Montserrat-ThinItalic.ttf",
-      "sha1": "21fdb007ec60c23df8ef1fbb586b397b2f1f099a"
+      "path": "src/assets/fonts/DMSans/DMSans-ThinItalic.ttf",
+      "sha1": "c15bf18d0a898fadc2a2e198ef08bba9d89470b0"
+    },
+    {
+      "path": "src/assets/fonts/TomatoGrotesk/TomatoGrotesk-Black.otf",
+      "sha1": "b0fe4df89f526375b5c357cbf2cca3e9c13b2a23"
+    },
+    {
+      "path": "src/assets/fonts/TomatoGrotesk/TomatoGrotesk-BlackSlanted.otf",
+      "sha1": "6d9ae04dccd2856f7a39ee23f58598ed8d7d7ce6"
+    },
+    {
+      "path": "src/assets/fonts/TomatoGrotesk/TomatoGrotesk-Bold.otf",
+      "sha1": "6ee534b1da02e8f3385715f656f1f324aee97cd8"
+    },
+    {
+      "path": "src/assets/fonts/TomatoGrotesk/TomatoGrotesk-BoldSlanted.otf",
+      "sha1": "378d038d91e07228cdbcaee3603658317ce8031d"
+    },
+    {
+      "path": "src/assets/fonts/TomatoGrotesk/TomatoGrotesk-ExtraBold.otf",
+      "sha1": "beef85dc1f93f9b4b42505b9bc26a35b90643c88"
+    },
+    {
+      "path": "src/assets/fonts/TomatoGrotesk/TomatoGrotesk-ExtraBoldSlanted.otf",
+      "sha1": "8181fe54fba797c033f90ef85a691c605f25064d"
+    },
+    {
+      "path": "src/assets/fonts/TomatoGrotesk/TomatoGrotesk-ExtraLight.otf",
+      "sha1": "3054d7896a8e4a3f7b9a6f1332ba07a8a505f3a9"
+    },
+    {
+      "path": "src/assets/fonts/TomatoGrotesk/TomatoGrotesk-ExtraLightSlanted.otf",
+      "sha1": "8aff4babd6a63b8d9adabdd63416f180e7eaaba4"
+    },
+    {
+      "path": "src/assets/fonts/TomatoGrotesk/TomatoGrotesk-Light.otf",
+      "sha1": "d064c04da59d6fb64ebbb37870c8954929683e17"
+    },
+    {
+      "path": "src/assets/fonts/TomatoGrotesk/TomatoGrotesk-LightSlanted.otf",
+      "sha1": "e4451be2b3646b131838c77578e6ad50882dd129"
+    },
+    {
+      "path": "src/assets/fonts/TomatoGrotesk/TomatoGrotesk-Medium.otf",
+      "sha1": "bbdb2de1437f261d6b7b540c4588fac0e925be03"
+    },
+    {
+      "path": "src/assets/fonts/TomatoGrotesk/TomatoGrotesk-MediumSlanted.otf",
+      "sha1": "7bbf5f4979e8d3c981caf8581c956b6ec9832401"
+    },
+    {
+      "path": "src/assets/fonts/TomatoGrotesk/TomatoGrotesk-Regular.otf",
+      "sha1": "5b45240346ddb0578cd96e3f130dc331e0e672a5"
+    },
+    {
+      "path": "src/assets/fonts/TomatoGrotesk/TomatoGrotesk-SemiBold.otf",
+      "sha1": "80c8d3eec803e64c4e1a529bc2962f6279b29550"
+    },
+    {
+      "path": "src/assets/fonts/TomatoGrotesk/TomatoGrotesk-SemiBoldSlanted.otf",
+      "sha1": "054890559e7ad4f7f9fb67bf71ed2af89c7fee49"
+    },
+    {
+      "path": "src/assets/fonts/TomatoGrotesk/TomatoGrotesk-Slanted.otf",
+      "sha1": "2d92f8be11fab7260b0e1ff5bb9cd0704ce8aebe"
+    },
+    {
+      "path": "src/assets/fonts/TomatoGrotesk/TomatoGrotesk-Thin.otf",
+      "sha1": "7095170d8786afe999846c81932de699a5d73dc5"
+    },
+    {
+      "path": "src/assets/fonts/TomatoGrotesk/TomatoGrotesk-ThinSlanted.otf",
+      "sha1": "8fc8f39b64b8be316754b656cbac9435a08d123f"
     }
   ]
 }

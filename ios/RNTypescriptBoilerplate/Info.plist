@@ -69,24 +69,42 @@
 		<string>Octicons.ttf</string>
 		<string>Zocial.ttf</string>
 		<string>Fontisto.ttf</string>
-		<string>Montserrat-Black.ttf</string>
-		<string>Montserrat-BlackItalic.ttf</string>
-		<string>Montserrat-Bold.ttf</string>
-		<string>Montserrat-BoldItalic.ttf</string>
-		<string>Montserrat-ExtraBold.ttf</string>
-		<string>Montserrat-ExtraBoldItalic.ttf</string>
-		<string>Montserrat-ExtraLight.ttf</string>
-		<string>Montserrat-ExtraLightItalic.ttf</string>
-		<string>Montserrat-Italic.ttf</string>
-		<string>Montserrat-Light.ttf</string>
-		<string>Montserrat-LightItalic.ttf</string>
-		<string>Montserrat-Medium.ttf</string>
-		<string>Montserrat-MediumItalic.ttf</string>
-		<string>Montserrat-Regular.ttf</string>
-		<string>Montserrat-SemiBold.ttf</string>
-		<string>Montserrat-SemiBoldItalic.ttf</string>
-		<string>Montserrat-Thin.ttf</string>
-		<string>Montserrat-ThinItalic.ttf</string>
+		<string>TomatoGrotesk-Black.otf</string>
+		<string>TomatoGrotesk-BlackSlanted.otf</string>
+		<string>TomatoGrotesk-Bold.otf</string>
+		<string>TomatoGrotesk-BoldSlanted.otf</string>
+		<string>TomatoGrotesk-ExtraBold.otf</string>
+		<string>TomatoGrotesk-ExtraBoldSlanted.otf</string>
+		<string>TomatoGrotesk-ExtraLight.otf</string>
+		<string>TomatoGrotesk-ExtraLightSlanted.otf</string>
+		<string>TomatoGrotesk-Light.otf</string>
+		<string>TomatoGrotesk-LightSlanted.otf</string>
+		<string>TomatoGrotesk-Medium.otf</string>
+		<string>TomatoGrotesk-MediumSlanted.otf</string>
+		<string>TomatoGrotesk-Regular.otf</string>
+		<string>TomatoGrotesk-SemiBold.otf</string>
+		<string>TomatoGrotesk-SemiBoldSlanted.otf</string>
+		<string>TomatoGrotesk-Slanted.otf</string>
+		<string>TomatoGrotesk-Thin.otf</string>
+		<string>TomatoGrotesk-ThinSlanted.otf</string>
+		<string>DMSans-Black.ttf</string>
+		<string>DMSans-BlackItalic.ttf</string>
+		<string>DMSans-Bold.ttf</string>
+		<string>DMSans-BoldItalic.ttf</string>
+		<string>DMSans-ExtraBold.ttf</string>
+		<string>DMSans-ExtraBoldItalic.ttf</string>
+		<string>DMSans-ExtraLight.ttf</string>
+		<string>DMSans-ExtraLightItalic.ttf</string>
+		<string>DMSans-Italic.ttf</string>
+		<string>DMSans-Light.ttf</string>
+		<string>DMSans-LightItalic.ttf</string>
+		<string>DMSans-Medium.ttf</string>
+		<string>DMSans-MediumItalic.ttf</string>
+		<string>DMSans-Regular.ttf</string>
+		<string>DMSans-SemiBold.ttf</string>
+		<string>DMSans-SemiBoldItalic.ttf</string>
+		<string>DMSans-Thin.ttf</string>
+		<string>DMSans-ThinItalic.ttf</string>
 	</array>
 </dict>
 </plist>

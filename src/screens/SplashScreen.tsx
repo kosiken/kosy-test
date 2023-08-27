@@ -1,0 +1,81 @@
+/* eslint-disable react-native/no-unused-styles */
+import { Image, StyleSheet } from "react-native";
+import {
+  CommonActions,
+  ExtendedTheme,
+  useTheme,
+} from "@react-navigation/native";
+import React, { useEffect, useMemo } from "react";
+import Page from "@shared-components/page/Page";
+import Box from "@shared-components/box/Box";
+import TextWrapper from "@shared-components/text-wrapper/TextWrapper";
+import { IBaseScreenProps, SCREENS } from "@shared-constants";
+
+interface SplashScreenProps extends IBaseScreenProps<"SplashScreen"> {}
+
+const createStyles = (theme: ExtendedTheme) => {
+  const { colors } = theme;
+  return StyleSheet.create({
+    main: {
+      backgroundColor: colors.primary,
+    },
+    description: {
+      marginTop: 35,
+    },
+  });
+};
+
+const SplashScreen: React.FC<SplashScreenProps> = ({ navigation }) => {
+  const theme = useTheme();
+  const styles = useMemo(() => createStyles(theme), [theme]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [
+            {
+              name: SCREENS.ONBOARDING,
+            },
+          ],
+        }),
+      );
+    }, 2000);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <Page
+      style={styles.main}
+      statusBarProps={{
+        backgroundColor: theme.colors.primary,
+        barStyle: "light-content",
+      }}
+    >
+      <Box margin={[100, 0]} alignItems="center" flex={1}>
+        <Box width={200} alignItems="center">
+          <Image source={require("../assets/images/logo.png")} />
+          <TextWrapper
+            fontSize={18}
+            textAlign="center"
+            color={theme.colors.white}
+            style={styles.description}
+          >
+            Dollar investments that help you grow{" "}
+          </TextWrapper>
+        </Box>
+      </Box>
+      <Box>
+        <TextWrapper textAlign="center" color={theme.colors.white}>
+          All rights reserved
+        </TextWrapper>
+        <TextWrapper textAlign="center" color={theme.colors.white}>
+          (c) 2021
+        </TextWrapper>
+      </Box>
+    </Page>
+  );
+};
+
+export default SplashScreen;
