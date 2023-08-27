@@ -5,6 +5,7 @@ import RNText, { IRNTextProps } from "@freakycoder/react-native-custom-text";
  */
 import fonts from "@fonts";
 import { TextStyle } from "react-native";
+import { useTheme } from "@react-navigation/native";
 
 interface ITextWrapperProps extends IRNTextProps {
   color?: string;
@@ -18,9 +19,10 @@ interface ITextWrapperProps extends IRNTextProps {
 }
 
 const TextWrapper: React.FC<ITextWrapperProps> = (props) => {
+  const theme = useTheme();
   const {
     fontFamily = fonts.tomatogrotesk.regular,
-    color = "#757575",
+    color,
     children,
     textAlign,
     fontSize,
@@ -43,7 +45,7 @@ const TextWrapper: React.FC<ITextWrapperProps> = (props) => {
         },
         ...(Array.isArray(style) ? style : [style]),
       ]}
-      color={color}
+      color={color || theme.colors.text}
       {...rest}
     >
       {children}

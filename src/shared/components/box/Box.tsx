@@ -1,4 +1,4 @@
-import { StyleProp, ViewStyle } from "react-native";
+import { ImageBackgroundProps, StyleProp, ViewStyle } from "react-native";
 import React from "react";
 import styled from "styled-components/native";
 import {
@@ -7,20 +7,28 @@ import {
   FlexboxProps,
   flexbox,
   layout,
+  borderRadius,
+  border,
+  BorderProps,
   LayoutProps,
   margin,
   MarginProps,
+  BorderRadiusProps,
 } from "styled-system";
 import { Debug } from "@utils";
 
-type BoxProps = BackgroundColorProps &
+export type BoxProps = BackgroundColorProps &
+  Partial<ImageBackgroundProps> &
   FlexboxProps &
   LayoutProps &
-  MarginProps & {
+  MarginProps &
+  BorderRadiusProps &
+  BorderProps & {
     margin?: Array<string | number> | string | number;
     children?: React.ReactNode;
     style?: StyleProp<ViewStyle>;
     padding?: Array<string | number> | string | number;
+    imageBackground?: boolean;
   };
 
 const ViewBox = styled.View<BoxProps>`
@@ -28,6 +36,17 @@ const ViewBox = styled.View<BoxProps>`
   ${layout}
   ${flexbox}
   ${margin}
+  ${borderRadius}
+  ${border}
+`;
+
+const ViewBoxImage = styled.ImageBackground`
+  ${backgroundColor}
+  ${layout}
+  ${flexbox}
+  ${margin}
+  ${borderRadius}
+  ${border}
 `;
 
 const Box: React.FC<BoxProps> = ({
@@ -35,6 +54,7 @@ const Box: React.FC<BoxProps> = ({
   margin,
   style,
   padding,
+  imageBackground,
   ...props
 }) => {
   let marginStyle: StyleProp<ViewStyle> = {};
@@ -110,6 +130,16 @@ const Box: React.FC<BoxProps> = ({
           break;
       }
     }
+  }
+  if (imageBackground) {
+    return (
+      <ViewBoxImage
+        {...(props as any)}
+        style={[marginStyle, paddingStyle, style]}
+      >
+        {children}
+      </ViewBoxImage>
+    );
   }
   return (
     <ViewBox {...props} style={[marginStyle, paddingStyle, style]}>

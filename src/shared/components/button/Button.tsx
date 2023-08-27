@@ -102,6 +102,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
         <TextWrapper
           textAlign="center"
           style={{ flex: 1 }}
+          fontWeight="700"
           color={
             textColor ||
             (variant === "primary" ? theme.colors.white : theme.colors.primary)

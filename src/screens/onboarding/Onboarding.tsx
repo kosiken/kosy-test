@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   View,
   Image,
@@ -5,7 +6,7 @@ import {
   useWindowDimensions,
   NativeScrollEvent,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { palette } from "@theme/themes";
 import Page from "@shared-components/page/Page";
 import Animated, {
@@ -18,15 +19,23 @@ import Animated, {
   useSharedValue,
 } from "react-native-reanimated";
 import TextWrapper from "@shared-components/text-wrapper/TextWrapper";
-import { IBaseScreenProps } from "@shared-constants";
+import { IBaseScreenProps, SCREENS } from "@shared-constants";
 import Box from "@shared-components/box/Box";
 import CustomButton from "@shared-components/button/Button";
 import Icon, { IconType } from "react-native-dynamic-vector-icons";
-import AnimatedFadeInOut from "@shared-components/animatedFadeInOut/AnimatedFadeInOut";
+import AnimatedFadeInOut from "@shared-components/animated-fade-in-out/AnimatedFadeInOut";
+import { FlatList } from "react-native-gesture-handler";
 
 interface OnboardingProps extends IBaseScreenProps<"Onboarding"> {}
 
-const data = [
+type ItemData = {
+  title: string;
+  subtitle: string;
+  image: () => React.JSX.Element;
+  color: string;
+  bgColor: string;
+};
+const data: ItemData[] = [
   {
     title: "Quality assets",
     subtitle:
@@ -68,7 +77,7 @@ const data = [
 const Dot: React.FC<{
   scrollX: SharedValue<number>;
   index: number;
-  item: (typeof data)[0];
+  item: ItemData;
   width: number;
 }> = ({ scrollX, index, item, width }) => {
   const inputRange = [(index - 1) * width, index * width, (index + 1) * width];
@@ -132,9 +141,10 @@ const Indicator: React.FC<{ scrollX: SharedValue<number>; width: number }> = ({
   );
 };
 
-const Onboarding: React.FC<OnboardingProps> = () => {
+const Onboarding: React.FC<OnboardingProps> = ({ navigation }) => {
   //   const theme = useTheme();
   //   const colors = theme.colors as typeof palette;
+  const flatListRef = useRef<FlatList>();
   const { width } = useWindowDimensions();
   const [currentPage, setCurrentPage] = useState(0);
   const sx = useSharedValue(0);
@@ -151,7 +161,15 @@ const Onboarding: React.FC<OnboardingProps> = () => {
     },
   });
 
-  const renderData = ({ item }: { item: (typeof data)[0] }) => (
+  const scroll = (direction: "forward" | "back") => {
+    const increase = direction === "forward" ? 1 : -1;
+    flatListRef.current?.scrollToIndex({
+      index: currentPage + increase,
+      animated: true,
+    });
+  };
+
+  const renderData = ({ item }: { item: ItemData }) => (
     <Box width={width}>
       <Box alignItems="center">{item.image()}</Box>
     </Box>
@@ -169,6 +187,7 @@ const Onboarding: React.FC<OnboardingProps> = () => {
           showsHorizontalScrollIndicator={false}
           horizontal
           pagingEnabled
+          ref={flatListRef as any}
         />
       </Box>
       <Indicator scrollX={sx} width={width} />
@@ -189,11 +208,13 @@ const Onboarding: React.FC<OnboardingProps> = () => {
               <Box width={50}>
                 <CustomButton
                   variant="secondary"
+                  disabled={currentPage < 1}
+                  onPress={() => scroll("back")}
                   leftComponent={
                     <Icon
                       name="arrow-left"
                       type={IconType.Feather}
-                      color={currentPage === 0 ? "#94A1AD" : currentItem.color}
+                      color={currentPage < 1 ? "#94A1AD" : currentItem.color}
                     />
                   }
                 />
@@ -203,6 +224,7 @@ const Onboarding: React.FC<OnboardingProps> = () => {
                   label="Next"
                   textColor={currentItem.color}
                   variant="secondary"
+                  onPress={() => scroll("forward")}
                   rightComponent={
                     <Icon
                       name="arrow-right"
@@ -217,9 +239,20 @@ const Onboarding: React.FC<OnboardingProps> = () => {
           <AnimatedFadeInOut show={currentPage === 2}>
             <Box>
               <Box marginBottom={16}>
-                <CustomButton label="Sign Up" />
+                <CustomButton
+                  label="Sign Up"
+                  onPress={() => {
+                    navigation.navigate(SCREENS.SIGNUP);
+                  }}
+                />
               </Box>
-              <CustomButton variant="secondary" label="Sign In" />
+              <CustomButton
+                variant="secondary"
+                label="Sign In"
+                onPress={() => {
+                  navigation.navigate(SCREENS.SIGNIN);
+                }}
+              />
             </Box>
           </AnimatedFadeInOut>
         </Box>

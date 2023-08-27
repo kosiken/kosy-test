@@ -84,7 +84,7 @@ module.exports = {
     "max-len": ["error", 120],
     "@typescript-eslint/ban-ts-comment": 2,
     "@typescript-eslint/no-empty-function": 0,
-    "@typescript-eslint/no-explicit-any": 1,
+    "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/explicit-module-boundary-types": 0,
     "react/jsx-filename-extension": ["error", { extensions: [".tsx"] }],
     "react-native/no-unused-styles": 2,

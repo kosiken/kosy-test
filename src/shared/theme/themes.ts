@@ -8,7 +8,7 @@ export const palette = {
   black: "#101214",
   button: "#1c1e21",
   shadow: "#757575",
-  text: "#222222",
+  text: "#757575",
   borderColor: "#d0d7de",
   borderColorDark: "#333942",
   placeholder: "#a1a1a1",
@@ -27,6 +27,10 @@ export const palette = {
   orange: "#FE7122",
   indigo: "#B80074",
   teal: "#0898A0",
+  textBlack: "#222222",
+  red: "#EB5757",
+  green: "#27BF41",
+  offWhite: "#71879C1A",
 };
 
 export const LightTheme: ExtendedTheme = {
@@ -52,5 +56,6 @@ export const DarkTheme: ExtendedTheme = {
     dynamicBackground: palette.dynamicBlack,
     shadow: palette.transparent,
     borderColor: palette.borderColorDark,
+    textBlack: "#DDDDDD",
   },
 };
