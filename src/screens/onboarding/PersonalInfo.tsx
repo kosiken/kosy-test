@@ -347,7 +347,7 @@ const PersonalInfo: React.FC<PersonalInfoProps> = () => {
             </Box>
           )}
 
-          <Box marginBottom={16}>
+          <Box margin={[16, 0]}>
             <CustomButton label="Continue" onPress={handleSubmit(onSubmit)} />
           </Box>
         </Box>

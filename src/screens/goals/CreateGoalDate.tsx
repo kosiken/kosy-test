@@ -21,7 +21,6 @@ import Icon, { IconType } from "react-native-dynamic-vector-icons";
 interface CreateGoalDateProps extends IBaseScreenProps<"CreateGoalDate"> {}
 
 const CreateGoalDate: React.FC<CreateGoalDateProps> = ({ navigation }) => {
-  const today = new Date();
   const [showDate, setShowDate] = useState(false);
   const [dateHere, setDateHere] = useState<Date | undefined>();
   const { addItemToGoalRequest } = useBoundStore();
@@ -33,6 +32,7 @@ const CreateGoalDate: React.FC<CreateGoalDateProps> = ({ navigation }) => {
     setDateHere(currentDate);
     addItemToGoalRequest({ date: currentDate.toISOString() });
   };
+  const min = dayjs().add(1, "year").toDate();
   const { colors } = useTheme() as { colors: typeof palette };
   return (
     <Page label="Target date " navigation={navigation}>
@@ -43,9 +43,9 @@ const CreateGoalDate: React.FC<CreateGoalDateProps> = ({ navigation }) => {
             style={{ marginBottom: 21, marginTop: 30 }}
             fontSize={15}
           >
-            Question 1 of 3
+            Question 3 of 3
           </TextWrapper>
-          <Progress value={1 / 3} />
+          <Progress value={1} />
           <TextWrapper
             color={colors.textBlack}
             style={{ marginTop: 50 }}
@@ -59,7 +59,7 @@ const CreateGoalDate: React.FC<CreateGoalDateProps> = ({ navigation }) => {
             <TextInputWrapper
               label="Date of Birth"
               editable={false}
-              value={dayjs(dateHere || today).format("DD/MM/YYYY")}
+              value={dayjs(dateHere || min).format("DD/MM/YYYY")}
               onPressIn={() => setShowDate((s) => !s)}
               rightComponent={
                 <TouchableOpacity onPress={() => setShowDate((s) => !s)}>
@@ -74,10 +74,10 @@ const CreateGoalDate: React.FC<CreateGoalDateProps> = ({ navigation }) => {
             {showDate && (
               <Box marginBottom={10}>
                 <DateTimePicker
-                  value={dateHere || today}
+                  value={dateHere || min}
                   mode="date"
                   onChange={onChange}
-                  minimumDate={today}
+                  minimumDate={min}
                 />
               </Box>
             )}

@@ -27,7 +27,7 @@ import {
   useTheme,
 } from "@react-navigation/native";
 import Icon, { IconType } from "react-native-dynamic-vector-icons";
-import { Debug, capitalizeFirstLetter, to2DecimalPlaces } from "@utils";
+import { capitalizeFirstLetter, storage, to2DecimalPlaces } from "@utils";
 import { palette } from "@theme/themes";
 import {
   IBaseScreenProps,
@@ -52,6 +52,7 @@ interface IBalance {
   balance: number;
   change: number;
   currency: string;
+  label: string;
 }
 
 const IMAGES = [
@@ -106,7 +107,7 @@ const Indicator: React.FC<{
 const HeaderComponent: React.FC<{
   notificationCount: number;
   theme: any;
-  user: User;
+  user: User | null;
 }> = ({ theme, notificationCount, user }) => {
   const now = dayjs();
   const hour = now.hour();
@@ -121,7 +122,7 @@ const HeaderComponent: React.FC<{
       <Box flex={1}>
         <TextWrapper fontSize={15}>{message}</TextWrapper>
         <TextWrapper fontSize={20}>
-          {capitalizeFirstLetter(user.first_name)}
+          {capitalizeFirstLetter(user?.first_name || "")}
         </TextWrapper>
       </Box>
       <Box>
@@ -170,15 +171,34 @@ const BalanceItem: React.FC<{
   balanceItem: IBalance;
   theme: any;
   moveForward: () => void;
+  show: boolean;
   showNext: boolean;
-}> = ({ balanceItem, theme, showNext, moveForward }) => {
+  setShow: (b: boolean) => void;
+}> = ({ balanceItem, theme, showNext, moveForward, show, setShow }) => {
   const { balance, currency, change } = balanceItem;
+
   const isGain = change >= 0;
   return (
     <Box alignItems="center">
+      <TouchableOpacity
+        onPress={() => setShow(!show)}
+        style={{ marginBottom: 12 }}
+      >
+        <Box flexDirection="row" alignItems="center">
+          <TextWrapper fontSize={15}>{balanceItem.label}</TextWrapper>
+          <Icon
+            name={show ? "eye-off" : "eye"}
+            type={IconType.MaterialCommunityIcons}
+            color={theme.colors.primary}
+            size={13}
+            style={{ marginLeft: 4 }}
+          />
+        </Box>
+      </TouchableOpacity>
+
       <TextWrapper fontSize={32} style={Styles.mb12}>
         {currency}
-        {to2DecimalPlaces(balance)}
+        {show ? to2DecimalPlaces(balance) : "*****"}
       </TextWrapper>
       <View
         style={[
@@ -258,7 +278,13 @@ const CreatePlan: React.FC<{ theme: any; onClose: () => void }> = ({
   ];
   const { top } = useSafeAreaInsets();
   return (
-    <SafeAreaView style={{ flex: 1, paddingTop: top }}>
+    <SafeAreaView
+      style={{
+        flex: 1,
+        paddingTop: top,
+        backgroundColor: theme.colors.background,
+      }}
+    >
       <Page
         navigationComponent={
           <TouchableOpacity onPress={() => onClose()}>
@@ -343,6 +369,7 @@ const CreatePlan: React.FC<{ theme: any; onClose: () => void }> = ({
 
 const HomeScreen: React.FC<HomeProps> = ({ navigation }) => {
   const theme = useTheme();
+  const [showBalance, setShowBalance] = useState(true);
   const [show, setShow] = useState(false);
   const [todayQuote, setTodayQuote] = useState<
     { quote: string; author: string } | undefined
@@ -394,13 +421,21 @@ const HomeScreen: React.FC<HomeProps> = ({ navigation }) => {
       },
     });
   };
+  const toggleBalance = (showBal: boolean) => {
+    storage.set("app.show_balance", showBal);
+    setShowBalance(showBal);
+  };
+
   useEffect(() => {
+    const showBal = storage.getBoolean("app.show_balance");
+    if (showBal !== undefined) {
+      setShowBalance(showBal);
+    }
     setLoading(true);
     const response$ = from(riseApi.getPlans({}, {}));
     response$.subscribe({
       next: (res) => {
         if (res.code === 200 || res.code === 201) {
-          Debug.log(res.data);
           setPlans(res.data!.items);
         } else {
           Alert.alert(
@@ -420,7 +455,6 @@ const HomeScreen: React.FC<HomeProps> = ({ navigation }) => {
     response$.subscribe({
       next: (res) => {
         if (res.code === 200 || res.code === 201) {
-          Debug.log(res.data);
           setTodayQuote(res.data);
         } else {
           Alert.alert(
@@ -434,15 +468,17 @@ const HomeScreen: React.FC<HomeProps> = ({ navigation }) => {
   useEffect(() => {
     const _balances: IBalance[] = [
       {
-        balance: (user as any).total_balance,
+        balance: (user as any)?.total_balance || 0,
         change: 0,
         currency: "$",
+        label: "Total Balance",
       },
     ].concat(
-      plans.map((p) => ({
+      plans.slice(3).map((p) => ({
         balance: p.total_returns,
-        change: p.total_returns / p.invested_amount,
+        change: p.total_returns / p.target_amount,
         currency: "$",
+        label: p.plan_name,
       })),
     );
     setBalances(_balances);
@@ -468,6 +504,8 @@ const HomeScreen: React.FC<HomeProps> = ({ navigation }) => {
         balanceItem={item}
         showNext
         moveForward={scroll}
+        show={showBalance}
+        setShow={toggleBalance}
       />
     </Box>
   );

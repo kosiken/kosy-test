@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTheme } from "@react-navigation/native";
 
 import { IBaseScreenProps, SCREENS } from "@shared-constants";
@@ -35,6 +35,29 @@ const CreateGoalConfirm: React.FC<CreateGoalConfirmProps> = ({
     .map((a, i) => a + (i + 1) * 0.25 * 24000);
   const { user, goalRequestData, resetGoalRequestData } = useBoundStore();
   const { width } = useWindowDimensions();
+  const [rates, setRates] = useState<
+    { buy_rate: number; sell_rate: number } | undefined
+  >();
+
+  useEffect(() => {
+    const response$ = from(riseApi.getRates({}, {}));
+    setLoading(true);
+    response$.subscribe({
+      next: (res) => {
+        if (res.code === 200 || res.code === 201) {
+          setRates(res.data!);
+        } else {
+          Alert.alert(
+            "Error",
+            res.errorData?.message || "Something went wrong",
+          );
+        }
+      },
+      complete: () => {
+        setLoading(false);
+      },
+    });
+  }, []);
 
   const createPlan = () => {
     setLoading(true);
@@ -95,7 +118,13 @@ const CreateGoalConfirm: React.FC<CreateGoalConfirmProps> = ({
               fontWeight="700"
               color={colors.textBlack}
             >
-              ${to2DecimalPlaces(goalRequestData.amount || 0, true)}
+              {rates
+                ? "$" +
+                  to2DecimalPlaces(
+                    (goalRequestData.amount || 0) / rates.buy_rate,
+                    true,
+                  )
+                : ""}
             </TextWrapper>
             <TextWrapper fontSize={12}>
               by {dayjs(goalRequestData.date).format("DD MMMM YYYY")}
@@ -133,7 +162,7 @@ const CreateGoalConfirm: React.FC<CreateGoalConfirmProps> = ({
               },
             ],
           }}
-          width={width - 20} // from react-native
+          width={width} // from react-native
           height={200}
           formatYLabel={(y) => putCommas(y.split(".")[0])}
           yAxisLabel="$"

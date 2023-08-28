@@ -42,9 +42,9 @@ const CreateGoalAmount: React.FC<CreateGoalAmountProps> = ({ navigation }) => {
             style={{ marginBottom: 21, marginTop: 30 }}
             fontSize={15}
           >
-            Question 1 of 3
+            Question 2 of 3
           </TextWrapper>
-          <Progress value={1 / 3} />
+          <Progress value={2 / 3} />
           <TextWrapper
             color={colors.textBlack}
             style={{ marginTop: 50 }}
@@ -56,6 +56,8 @@ const CreateGoalAmount: React.FC<CreateGoalAmountProps> = ({ navigation }) => {
 
           <Box margin={[26, 0]}>
             <TextInputWrapper
+              keyboardType="decimal-pad"
+              inputMode="numeric"
               leftComponent={
                 <Box marginRight={10}>
                   <TextWrapper

@@ -17,7 +17,7 @@ export interface AuthSlice {
   resetAll: () => void;
   resetRequestData: () => void;
   user: User | null;
-  setUser: (u: User) => void;
+  setUser: (u: User | null) => void;
 }
 
 type goalCreateData = {

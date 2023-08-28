@@ -13,6 +13,7 @@ import Box from "@shared-components/box/Box";
 import TempScreen from "./TempScreen";
 import Icon, { IconType } from "react-native-dynamic-vector-icons";
 import TextWrapper from "@shared-components/text-wrapper/TextWrapper";
+import AccountScreen from "./Account";
 
 const Tab = createBottomTabNavigator<RootStackParamList>();
 
@@ -91,7 +92,7 @@ const RenderTabNavigation = () => {
       <Tab.Screen name={SCREENS.PLANS} component={TempScreen} />
       <Tab.Screen name={SCREENS.WALLET} component={TempScreen} />
       <Tab.Screen name={SCREENS.FEED} component={TempScreen} />
-      <Tab.Screen name={SCREENS.ACCOUNT} component={TempScreen} />
+      <Tab.Screen name={SCREENS.ACCOUNT} component={AccountScreen} />
     </Tab.Navigator>
   );
 };

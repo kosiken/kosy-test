@@ -200,7 +200,9 @@ const Onboarding: React.FC<OnboardingProps> = ({ navigation }) => {
         >
           {currentItem.title}
         </TextWrapper>
-        <TextWrapper fontSize={18}>{currentItem.subtitle}</TextWrapper>
+        <TextWrapper fontSize={18} color={palette.text}>
+          {currentItem.subtitle}
+        </TextWrapper>
 
         <Box marginTop={60}>
           <AnimatedFadeInOut show={currentPage < 2}>

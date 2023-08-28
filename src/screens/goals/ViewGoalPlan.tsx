@@ -283,7 +283,7 @@ const ViewGoalPlan: React.FC<ViewGoalPlanProps> = ({ navigation, route }) => {
               },
             ],
           }}
-          width={width - 20} // from react-native
+          width={width} // from react-native
           height={200}
           formatYLabel={(y) => putCommas(y.split(".")[0])}
           yAxisLabel="$"
