@@ -9,6 +9,7 @@ import {
   Alert,
   Image,
   ScrollView,
+  StatusBar,
   TouchableOpacity,
   useWindowDimensions,
 } from "react-native";
@@ -74,12 +75,13 @@ const ViewGoalPlan: React.FC<ViewGoalPlanProps> = ({ navigation, route }) => {
 
   return (
     <Box>
-      <Box height={0.15 * height} padding={[top, 0, 0]}>
+      <StatusBar backgroundColor={"rgba(255, 197, 177, 1)"} />
+      <Box height={0.18 * height} padding={[top, 0, 0]}>
         <Image
           source={require("@assets/images/cart.jpeg")}
           style={{
             width,
-            height: 0.15 * height,
+            height: 0.18 * height,
             position: "absolute",
             left: 0,
             top: 0,
@@ -91,7 +93,7 @@ const ViewGoalPlan: React.FC<ViewGoalPlanProps> = ({ navigation, route }) => {
             top: 0,
             left: 0,
             width,
-            height: 0.15 * height,
+            height: 0.18 * height,
           }}
           blurType="light"
           blurAmount={15}
@@ -99,7 +101,7 @@ const ViewGoalPlan: React.FC<ViewGoalPlanProps> = ({ navigation, route }) => {
         />
         <Box
           flexDirection="row"
-          padding={[0, 20]}
+          padding={[10, 20, 0]}
           justifyContent="space-between"
         >
           <Box
@@ -107,6 +109,7 @@ const ViewGoalPlan: React.FC<ViewGoalPlanProps> = ({ navigation, route }) => {
             height={40}
             justifyContent="center"
             width={"100%"}
+            padding={[10, 0, 0]}
           >
             <TextWrapper
               textAlign="center"
@@ -234,7 +237,9 @@ const ViewGoalPlan: React.FC<ViewGoalPlanProps> = ({ navigation, route }) => {
                 Target: ${to2DecimalPlaces(goal.target_amount, true)}
               </TextWrapper>
             </Box>
-            <Progress value={0.3} />
+            <Progress
+              value={Math.min(goal.total_returns / goal.target_amount, 1)}
+            />
           </Box>
           <Box alignItems="center" margin={[12, 0]}>
             <Badge

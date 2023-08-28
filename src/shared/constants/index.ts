@@ -22,6 +22,10 @@ export type RootStackParamList = {
   CreateGoalDone: { goal: SavingPlan };
   CreateGoalConfirm: undefined;
   ViewGoalPlan: { goal: SavingPlan };
+  Plans: undefined;
+  Wallet: undefined;
+  Feed: undefined;
+  Account: undefined;
 };
 
 export enum SCREENS {
@@ -30,6 +34,10 @@ export enum SCREENS {
   SEARCH = "Search",
   NOTIFICATION = "Notification",
   PROFILE = "Profile",
+  PLANS = "Plans",
+  WALLET = "Wallet",
+  FEED = "Feed",
+  ACCOUNT = "Account",
   DETAIL = "Detail",
   ONBOARDING = "Onboarding",
   SIGNUP = "SignUp",
