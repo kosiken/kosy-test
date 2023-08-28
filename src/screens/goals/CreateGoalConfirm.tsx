@@ -33,7 +33,6 @@ const CreateGoalConfirm: React.FC<CreateGoalConfirmProps> = ({
   const amounts = new Array<number>(5)
     .fill(24000)
     .map((a, i) => a + (i + 1) * 0.25 * 24000);
-  console.log(amounts);
   const { user, goalRequestData, resetGoalRequestData } = useBoundStore();
   const { width } = useWindowDimensions();
 

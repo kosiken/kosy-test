@@ -225,7 +225,6 @@ const SetPin: React.FC<SetPinProps> = ({ navigation }) => {
   };
 
   const handleBack = () => {
-    console.log("kkk");
     if (currentPage === 0 && navigation.canGoBack()) {
       navigation.goBack();
     } else if (currentPage > 0) {

@@ -7,6 +7,7 @@ import axios, {
   AxiosResponse,
 } from "axios";
 import { Alert } from "react-native";
+import { Debug } from "utils";
 
 export enum Methods {
   POST = "post",
@@ -34,7 +35,6 @@ abstract class ApiBase {
   public abstract resetAppState(): any;
 
   public setToken(token: string): void {
-    console.log(token);
     this.apiToken = token;
   }
 
@@ -170,8 +170,7 @@ abstract class ApiBase {
       body?: TBody,
       fail = false,
     ) => {
-      // tslint:disable-next-line: no-console
-      console.log(
+      Debug.log(
         `${method} ${url} body => ${JSON.stringify(body)}`,
         params,
         headers,

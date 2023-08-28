@@ -88,7 +88,6 @@ const SignUp: React.FC<SignUpProps> = ({ navigation }) => {
   useFocusEffect(validatePasswordFunction);
 
   const onSubmit = (values: { email: string; password: string }) => {
-    console.log(values);
     addItemToRequest(values);
     navigation.navigate(SCREENS.PERSONAL_INFO);
   };

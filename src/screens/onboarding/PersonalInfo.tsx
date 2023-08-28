@@ -125,7 +125,6 @@ const PersonalInfo: React.FC<PersonalInfoProps> = () => {
       countryCode: values.countryCode.value,
     };
     setLoading(true);
-    console.log(data);
     const response$ = from(
       riseApi.register(
         {},

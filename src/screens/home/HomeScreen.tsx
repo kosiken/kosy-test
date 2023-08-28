@@ -389,7 +389,6 @@ const HomeScreen: React.FC<HomeProps> = ({ navigation }) => {
         setRefreshing(false);
       },
       error: (e) => {
-        console.log(e);
         setRefreshing(false);
         Alert.alert("Error", e.message);
       },
