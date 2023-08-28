@@ -64,6 +64,9 @@ def reactNativeArchitectures() {
 }
 
 android {
+    buildFeatures {
+        buildConfig true
+    }
     ndkVersion rootProject.ext.ndkVersion
 
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -74,9 +77,9 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    namespace "com.rntypescriptboilerplate"
+    namespace "com.kosytest"
     defaultConfig {
-        applicationId "com.rntypescriptboilerplate"
+        applicationId "com.kosytest"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

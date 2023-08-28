@@ -1,6 +1,5 @@
 import { StateCreator } from "zustand";
 import { AppSlice, AuthSlice, GoalSlice, Slices } from "./types";
-import { storage } from "utils";
 
 // NavigationService
 export const createAuthSlice: StateCreator<Slices, [], [], AuthSlice> = (
@@ -17,7 +16,6 @@ export const createAuthSlice: StateCreator<Slices, [], [], AuthSlice> = (
 
   resetAll: () => set({ signUpData: {} }),
   setUser: (u) => {
-    storage.set("user.data", JSON.stringify(u));
     set({ user: u });
   },
 });

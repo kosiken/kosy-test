@@ -1,15 +1,15 @@
 /* eslint-disable react-native/no-unused-styles */
 import { Image, StyleSheet } from "react-native";
-import {
-  CommonActions,
-  ExtendedTheme,
-  useTheme,
-} from "@react-navigation/native";
+import { ExtendedTheme, useTheme } from "@react-navigation/native";
 import React, { useEffect, useMemo } from "react";
 import Page from "@shared-components/page/Page";
 import Box from "@shared-components/box/Box";
 import TextWrapper from "@shared-components/text-wrapper/TextWrapper";
 import { IBaseScreenProps, SCREENS } from "@shared-constants";
+import riseApi from "@api";
+import { from } from "rxjs";
+import axios from "axios";
+import useBoundStore from "store";
 
 interface SplashScreenProps extends IBaseScreenProps<"SplashScreen"> {}
 
@@ -29,19 +29,34 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ navigation }) => {
   const theme = useTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
+  const { setUser } = useBoundStore();
   useEffect(() => {
-    setTimeout(() => {
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [
-            {
-              name: SCREENS.ONBOARDING,
-            },
-          ],
-        }),
-      );
-    }, 2000);
+    const token = riseApi.getToken();
+    if (!token || token === "") {
+      navigation.replace(SCREENS.ONBOARDING);
+      return;
+    }
+    const response$ = from(
+      axios.get(riseApi.apiUrl + "/sessions", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    );
+    response$.subscribe({
+      next: (res) => {
+        if (res.status === 200 || res.status === 201) {
+          setUser(res.data);
+          riseApi.setToken(token);
+          navigation.replace(SCREENS.HOME);
+        } else {
+          navigation.replace(SCREENS.ONBOARDING);
+        }
+      },
+      error: () => {
+        navigation.replace(SCREENS.ONBOARDING);
+      },
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
