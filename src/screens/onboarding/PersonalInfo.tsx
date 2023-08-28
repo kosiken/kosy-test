@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
+  Alert,
   Image,
   Platform,
   StyleSheet,
@@ -9,7 +10,7 @@ import {
 import React, { useCallback, useRef, useState } from "react";
 import * as yup from "yup";
 import { useForm, Controller } from "react-hook-form";
-import { IBaseScreenProps } from "@shared-constants";
+import { IBaseScreenProps, SCREENS } from "@shared-constants";
 import Page from "@shared-components/page/Page";
 import { useTheme } from "@react-navigation/native";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -32,6 +33,10 @@ import ModalPicker, {
 import dayjs from "dayjs";
 import useBoundStore from "store";
 import Loader from "@shared-components/loading/Loading";
+import { AuthSlice } from "store/types";
+import riseApi from "@api";
+import { from } from "rxjs";
+import { NavigationService } from "@nav-local/NavigationService";
 
 interface PersonalInfoProps extends IBaseScreenProps<"PersonalInfo"> {}
 
@@ -97,7 +102,7 @@ const PersonalInfo: React.FC<PersonalInfoProps> = () => {
   const [showDateOfBirth, setShowDateOfBirth] = useState(false);
   const [dob, setDob] = useState<Date | undefined>();
   const modalPickerRef = useRef<PickerFunctions>();
-  const { addItemToRequest, register, signUpData } = useBoundStore();
+  const { addItemToRequest, signUpData } = useBoundStore();
   const [loading, setLoading] = useState(false);
   const { control, handleSubmit, setValue, watch } = useForm({
     resolver: yupResolver(schema),
@@ -112,11 +117,50 @@ const PersonalInfo: React.FC<PersonalInfoProps> = () => {
   });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onSubmit = async (values: any) => {
+  const onSubmit = (values: any) => {
     addItemToRequest({ ...values, countryCode: values.countryCode.value });
+    const data: Required<AuthSlice["signUpData"]> = {
+      ...signUpData,
+      ...values,
+      countryCode: values.countryCode.value,
+    };
     setLoading(true);
-    await register(signUpData);
-    setLoading(false);
+    console.log(data);
+    const response$ = from(
+      riseApi.register(
+        {},
+        {},
+        {
+          first_name: data.firstName,
+          last_name: data.lastName,
+          password: data.password,
+          email_address: data.email,
+          date_of_birth: dayjs(data.dob).format("YYYY-MM-DD"),
+        },
+      ),
+    );
+    response$.subscribe({
+      next: (res) => {
+        if (res.code === 200 || res.code === 201) {
+          Alert.alert("Success", "You have successfully signed up", [
+            {
+              text: "Continue",
+              onPress: () => {
+                NavigationService.resetHard(SCREENS.SIGNIN);
+              },
+            },
+          ]);
+        } else {
+          Alert.alert(
+            "Error",
+            res.errorData?.message || "Something Went wrong",
+          );
+        }
+      },
+      complete: () => {
+        setLoading(false);
+      },
+    });
   };
 
   const handleSelectItem = useCallback(

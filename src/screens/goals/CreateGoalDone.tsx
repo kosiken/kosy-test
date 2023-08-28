@@ -1,18 +1,25 @@
 import React from "react";
 import { IBaseScreenProps, SCREENS } from "@shared-constants";
-import { NavigationService } from "@nav-local/NavigationService";
 import DoneComponent from "@shared-components/done/DoneComponent";
+import useBoundStore from "store";
+import { capitalizeFirstLetter } from "utils";
 
 interface CreateGoalDoneProps extends IBaseScreenProps<"CreateGoalDone"> {}
 
-const CreateGoalDone: React.FC<CreateGoalDoneProps> = () => {
+const CreateGoalDone: React.FC<CreateGoalDoneProps> = ({
+  navigation,
+  route,
+}) => {
+  const { user } = useBoundStore();
   return (
     <DoneComponent
       title="You just created your plan."
-      description="Well done, Deborah"
+      description={`Well done, ${capitalizeFirstLetter(
+        user?.first_name || "",
+      )}`}
       prompt="View Plan"
       onContinue={() => {
-        NavigationService.resetHard(SCREENS.HOME);
+        navigation.replace(SCREENS.VIEW_GOAL_PLAN, { goal: route.params.goal });
       }}
     />
   );

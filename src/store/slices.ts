@@ -1,17 +1,14 @@
 import { StateCreator } from "zustand";
 import { AppSlice, AuthSlice, GoalSlice, Slices } from "./types";
+import { storage } from "utils";
 
-import { SCREENS } from "@shared-constants";
-
-import { Debug } from "@utils";
-import { NavigationService } from "@nav-local/NavigationService";
 // NavigationService
 export const createAuthSlice: StateCreator<Slices, [], [], AuthSlice> = (
   set,
   get,
 ) => ({
   signUpData: {},
-
+  user: null,
   addItemToRequest: (itemObj) => {
     const { signUpData } = get();
     set({ signUpData: Object.assign(signUpData, itemObj) });
@@ -19,9 +16,9 @@ export const createAuthSlice: StateCreator<Slices, [], [], AuthSlice> = (
   resetRequestData: () => set({ signUpData: {} }),
 
   resetAll: () => set({ signUpData: {} }),
-  register: async (d) => {
-    Debug.log(d);
-    NavigationService.resetHard(SCREENS.DONE);
+  setUser: (u) => {
+    storage.set("user.data", JSON.stringify(u));
+    set({ user: u });
   },
 });
 

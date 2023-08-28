@@ -11,8 +11,11 @@ import {
   TouchableOpacity,
   Modal,
   Image,
+  Alert,
+  RefreshControl,
+  ActivityIndicator,
 } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Page from "@shared-components/page/Page";
 import TextWrapper from "@shared-components/text-wrapper/TextWrapper";
 import dayjs from "dayjs";
@@ -24,7 +27,7 @@ import {
   useTheme,
 } from "@react-navigation/native";
 import Icon, { IconType } from "react-native-dynamic-vector-icons";
-import { to2DecimalPlaces } from "@utils";
+import { Debug, capitalizeFirstLetter, to2DecimalPlaces } from "@utils";
 import { palette } from "@theme/themes";
 import {
   IBaseScreenProps,
@@ -37,6 +40,11 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import RNBounceable from "@freakycoder/react-native-bounceable";
+import useBoundStore from "store";
+import { SavingPlan, User } from "@services/models";
+import Loader from "@shared-components/loading/Loading";
+import { forkJoin, from, map } from "rxjs";
+import riseApi from "@api";
 
 interface HomeProps extends IBaseScreenProps<"Home"> {}
 
@@ -45,37 +53,6 @@ interface IBalance {
   change: number;
   currency: string;
 }
-
-interface IPLan {
-  name: string;
-  type: string;
-  amount: number;
-}
-
-const BALANCES: IBalance[] = [
-  { balance: 256.89, change: 0.5, currency: "$" },
-  { balance: 3390, change: -14.2563, currency: "$" },
-  { balance: 3390, change: -14.2563, currency: "$" },
-  { balance: 3390, change: -14.2563, currency: "$" },
-];
-
-const PLANS: IPLan[] = [
-  {
-    amount: 188.25,
-    name: "Build Wealth",
-    type: "Mixed Assets",
-  },
-  {
-    amount: 188.25,
-    name: "Build Wealth",
-    type: "Mixed Assets",
-  },
-  {
-    amount: 188.25,
-    name: "Build Wealth",
-    type: "Mixed Assets",
-  },
-];
 
 const IMAGES = [
   require("@assets/images/coins.jpeg"),
@@ -126,10 +103,11 @@ const Indicator: React.FC<{
   );
 };
 
-const HeaderComponent: React.FC<{ notificationCount: number; theme: any }> = ({
-  theme,
-  notificationCount,
-}) => {
+const HeaderComponent: React.FC<{
+  notificationCount: number;
+  theme: any;
+  user: User;
+}> = ({ theme, notificationCount, user }) => {
   const now = dayjs();
   const hour = now.hour();
   let message = "Good morning ☀️";
@@ -142,7 +120,9 @@ const HeaderComponent: React.FC<{ notificationCount: number; theme: any }> = ({
     <Box flexDirection="row" alignItems="center" margin={[10, 0]}>
       <Box flex={1}>
         <TextWrapper fontSize={15}>{message}</TextWrapper>
-        <TextWrapper fontSize={20}>Deborah</TextWrapper>
+        <TextWrapper fontSize={20}>
+          {capitalizeFirstLetter(user.first_name)}
+        </TextWrapper>
       </Box>
       <Box>
         <Badge
@@ -361,20 +341,115 @@ const CreatePlan: React.FC<{ theme: any; onClose: () => void }> = ({
   );
 };
 
-const HomeScreen: React.FC<HomeProps> = () => {
+const HomeScreen: React.FC<HomeProps> = ({ navigation }) => {
   const theme = useTheme();
   const [show, setShow] = useState(false);
+  const [todayQuote, setTodayQuote] = useState<
+    { quote: string; author: string } | undefined
+  >();
   const [currentPage, setCurrentPage] = useState(0);
-  const [hasPlans, setHasPlans] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [balances, setBalances] = useState<IBalance[]>([]);
+  const [plans, setPlans] = useState<SavingPlan[]>([]);
   const flatListRef = useRef<FlatList>();
   const { width } = useWindowDimensions();
+  const { user, setUser } = useBoundStore();
   const recordScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const { x } = event.nativeEvent.contentOffset;
     const indexOfNextScreen = Math.round(x / width);
     setCurrentPage(indexOfNextScreen);
   };
+
+  const refresh = () => {
+    setRefreshing(true);
+    const response$ = forkJoin({
+      session: riseApi.session({}, {}),
+      plans: riseApi.getPlans({}, {}),
+    }).pipe(
+      map((d) => {
+        if (d.plans.code !== 200 && d.plans.code !== 201) {
+          setRefreshing(false);
+          throw new Error(d.plans.errorData?.message || "failed to load plans");
+        } else if (d.session.code !== 200 && d.session.code !== 201) {
+          setRefreshing(false);
+          throw new Error(
+            d.session.errorData?.message || "failed to load session",
+          );
+        }
+        return d;
+      }),
+    );
+    response$.subscribe({
+      next: ({ plans, session }) => {
+        setPlans(plans.data!.items);
+        setUser(session.data!);
+      },
+      complete: () => {
+        setRefreshing(false);
+      },
+      error: (e) => {
+        console.log(e);
+        setRefreshing(false);
+        Alert.alert("Error", e.message);
+      },
+    });
+  };
+  useEffect(() => {
+    setLoading(true);
+    const response$ = from(riseApi.getPlans({}, {}));
+    response$.subscribe({
+      next: (res) => {
+        if (res.code === 200 || res.code === 201) {
+          Debug.log(res.data);
+          setPlans(res.data!.items);
+        } else {
+          Alert.alert(
+            "Error",
+            res.errorData?.message || "Something went wrong",
+          );
+        }
+      },
+      complete: () => {
+        setLoading(false);
+      },
+    });
+  }, []);
+
+  useEffect(() => {
+    const response$ = from(riseApi.getQuote({}, {}));
+    response$.subscribe({
+      next: (res) => {
+        if (res.code === 200 || res.code === 201) {
+          Debug.log(res.data);
+          setTodayQuote(res.data);
+        } else {
+          Alert.alert(
+            "Error",
+            res.errorData?.message || "Something went wrong",
+          );
+        }
+      },
+    });
+  }, []);
+  useEffect(() => {
+    const _balances: IBalance[] = [
+      {
+        balance: (user as any).total_balance,
+        change: 0,
+        currency: "$",
+      },
+    ].concat(
+      plans.map((p) => ({
+        balance: p.total_returns,
+        change: p.total_returns / p.invested_amount,
+        currency: "$",
+      })),
+    );
+    setBalances(_balances);
+  }, [plans, user]);
   const scroll = () => {
-    if (currentPage === BALANCES.length - 1) {
+    if (currentPage === balances.length - 1) {
       flatListRef.current?.scrollToIndex({
         index: 0,
         animated: true,
@@ -408,8 +483,13 @@ const HomeScreen: React.FC<HomeProps> = () => {
     }
     return (
       <Box flexDirection="row">
-        {PLANS.map((p, i) => (
-          <TouchableOpacity key={`plan-${i}`}>
+        {plans.map((p, i) => (
+          <TouchableOpacity
+            key={`plan-${i}`}
+            onPress={() => {
+              navigation.navigate(SCREENS.VIEW_GOAL_PLAN, { goal: p });
+            }}
+          >
             <Box
               imageBackground
               source={IMAGES[i % IMAGES.length]}
@@ -422,13 +502,13 @@ const HomeScreen: React.FC<HomeProps> = () => {
             >
               <Box padding={16} width={"100%"}>
                 <TextWrapper color={theme.colors.white} fontSize={15}>
-                  {p.name}
+                  {p.plan_name}
                 </TextWrapper>
                 <TextWrapper color={theme.colors.white} fontSize={15}>
-                  ${to2DecimalPlaces(p.amount)}
+                  ${to2DecimalPlaces(p.invested_amount)}
                 </TextWrapper>
                 <TextWrapper color={theme.colors.white} fontSize={15}>
-                  {p.type}
+                  Mixed Assets
                 </TextWrapper>
               </Box>
             </Box>
@@ -437,11 +517,20 @@ const HomeScreen: React.FC<HomeProps> = () => {
       </Box>
     );
   };
+  const hasPlans = plans.length > 0;
   return (
     <Page>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={refresh} />
+        }
+      >
         <Box padding={[0, 20]}>
-          <HeaderComponent notificationCount={100} theme={theme} />
+          <HeaderComponent
+            notificationCount={100}
+            user={user as User}
+            theme={theme}
+          />
 
           <Box
             backgroundColor={theme.colors.background}
@@ -450,7 +539,7 @@ const HomeScreen: React.FC<HomeProps> = () => {
             marginTop={12}
           >
             <FlatList
-              data={BALANCES}
+              data={balances}
               keyExtractor={(_, index) => `balance-item${index}`}
               renderItem={renderBalance}
               scrollEventThrottle={16}
@@ -461,7 +550,7 @@ const HomeScreen: React.FC<HomeProps> = () => {
               ref={flatListRef as any}
             />
           </Box>
-          <Indicator currentPage={currentPage} data={BALANCES} />
+          <Indicator currentPage={currentPage} data={balances} />
           <RNBounceable>
             <Box
               flexDirection="row"
@@ -501,11 +590,7 @@ const HomeScreen: React.FC<HomeProps> = () => {
             >
               Create Plan
             </TextWrapper>
-            <TouchableOpacity
-              onPress={() => {
-                setHasPlans(!hasPlans);
-              }}
-            >
+            <TouchableOpacity onPress={() => {}}>
               <TextWrapper
                 color={hasPlans ? theme.colors.primary : "#94A1AD"}
                 fontWeight="700"
@@ -605,28 +690,33 @@ const HomeScreen: React.FC<HomeProps> = () => {
             padding={20}
             borderRadius={15}
           >
-            <TextWrapper fontWeight="700" color={theme.colors.white}>
-              TODAY’S QUOTE
-            </TextWrapper>
-            <Box margin={[20, 0]}>
-              <View
-                style={{ height: 2, width: 28, backgroundColor: "#FFFFFF" }}
-              />
-            </Box>
-            <TextWrapper fontSize={15} color={theme.colors.white}>
-              We have no intention of rotating capital out of strong multi-year
-              investments because they’ve recently done well or because ‘growth’
-              has out performed ‘value’.
-            </TextWrapper>
+            {!todayQuote && (
+              <ActivityIndicator color={theme.colors.white} size="small" />
+            )}
+            {!!todayQuote && (
+              <Box>
+                <TextWrapper fontWeight="700" color={theme.colors.white}>
+                  TODAY’S QUOTE
+                </TextWrapper>
+                <Box margin={[20, 0]}>
+                  <View
+                    style={{ height: 2, width: 28, backgroundColor: "#FFFFFF" }}
+                  />
+                </Box>
+                <TextWrapper fontSize={15} color={theme.colors.white}>
+                  {todayQuote.quote}
+                </TextWrapper>
 
-            <TextWrapper
-              fontSize={15}
-              style={{ marginTop: 20 }}
-              color={theme.colors.white}
-              fontWeight="700"
-            >
-              Carl Sagan
-            </TextWrapper>
+                <TextWrapper
+                  fontSize={15}
+                  style={{ marginTop: 20 }}
+                  color={theme.colors.white}
+                  fontWeight="700"
+                >
+                  {todayQuote.author}
+                </TextWrapper>
+              </Box>
+            )}
           </Box>
         </Box>
         <Box margin={[20, 0, 30]} alignItems="center">
@@ -648,6 +738,7 @@ const HomeScreen: React.FC<HomeProps> = () => {
           }}
         />
       </Modal>
+      {loading && <Loader />}
     </Page>
   );
 };

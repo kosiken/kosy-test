@@ -55,7 +55,21 @@ const CreateGoalAmount: React.FC<CreateGoalAmountProps> = ({ navigation }) => {
           </TextWrapper>
 
           <Box margin={[26, 0]}>
-            <TextInputWrapper value={theAmount} onChangeText={onChangeText} />
+            <TextInputWrapper
+              leftComponent={
+                <Box marginRight={10}>
+                  <TextWrapper
+                    color={colors.primary}
+                    fontSize={15}
+                    fontWeight="700"
+                  >
+                    ₦
+                  </TextWrapper>
+                </Box>
+              }
+              value={theAmount}
+              onChangeText={onChangeText}
+            />
           </Box>
           <CustomButton
             label="Continue"

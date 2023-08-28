@@ -52,7 +52,7 @@ const CreateGoalDate: React.FC<CreateGoalDateProps> = ({ navigation }) => {
             fontWeight="700"
             fontSize={17}
           >
-            What are you saving for?
+            When do you want to withdraw?
           </TextWrapper>
 
           <Box margin={[26, 0]}>
@@ -86,7 +86,7 @@ const CreateGoalDate: React.FC<CreateGoalDateProps> = ({ navigation }) => {
             label="Continue"
             disabled={!dateHere}
             onPress={() => {
-              navigation.navigate(SCREENS.CREATE_GOAL_DONE);
+              navigation.navigate(SCREENS.CREATE_GOAL_CONFIRM);
             }}
           />
         </Box>

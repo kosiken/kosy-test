@@ -1,6 +1,7 @@
 // ? Screens
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
+import { SavingPlan } from "@services/models";
 
 export type RootStackParamList = {
   SplashScreen: undefined;
@@ -18,7 +19,9 @@ export type RootStackParamList = {
   CreateGoalName: undefined;
   CreateGoalAmount: undefined;
   CreateGoalDate: undefined;
-  CreateGoalDone: undefined;
+  CreateGoalDone: { goal: SavingPlan };
+  CreateGoalConfirm: undefined;
+  ViewGoalPlan: { goal: SavingPlan };
 };
 
 export enum SCREENS {
@@ -38,6 +41,8 @@ export enum SCREENS {
   CREATE_GOAL_AMOUNT = "CreateGoalAmount",
   CREATE_GOAL_DATE = "CreateGoalDate",
   CREATE_GOAL_DONE = "CreateGoalDone",
+  CREATE_GOAL_CONFIRM = "CreateGoalConfirm",
+  VIEW_GOAL_PLAN = "ViewGoalPlan",
 }
 
 export type MainNavigationProp<

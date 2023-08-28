@@ -5,6 +5,8 @@ import CreateGoalName from "./CreateGoalName";
 import CreateGoalAmount from "./CreateGoalAmount";
 import CreateGoalDate from "./CreateGoalDate";
 import CreateGoalDone from "./CreateGoalDone";
+import CreateGoalConfirm from "./CreateGoalConfirm";
+import ViewGoalPlan from "./ViewGoalPlan";
 
 const GoalScreens: Array<{
   screen: SCREENS;
@@ -23,9 +25,14 @@ const GoalScreens: Array<{
     screen: SCREENS.CREATE_GOAL_DATE,
   },
   {
+    component: CreateGoalConfirm,
+    screen: SCREENS.CREATE_GOAL_CONFIRM,
+  },
+  {
     component: CreateGoalDone,
     screen: SCREENS.CREATE_GOAL_DONE,
   },
+  { component: ViewGoalPlan, screen: SCREENS.VIEW_GOAL_PLAN },
 ];
 
 export default GoalScreens;

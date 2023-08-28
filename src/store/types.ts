@@ -1,3 +1,5 @@
+import { User } from "@services/models";
+
 type signUpFormData = {
   firstName?: string;
   lastName?: string;
@@ -14,7 +16,8 @@ export interface AuthSlice {
   addItemToRequest: (data: signUpFormData) => void;
   resetAll: () => void;
   resetRequestData: () => void;
-  register: (d: signUpFormData) => Promise<void>;
+  user: User | null;
+  setUser: (u: User) => void;
 }
 
 type goalCreateData = {

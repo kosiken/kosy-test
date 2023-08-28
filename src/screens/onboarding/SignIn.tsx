@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import * as yup from "yup";
 import { useForm, Controller } from "react-hook-form";
@@ -15,6 +15,11 @@ import CustomButton from "@shared-components/button/Button";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import useBoundStore from "store";
 import { NavigationService } from "@nav-local/NavigationService";
+import Loader from "@shared-components/loading/Loading";
+import { from } from "rxjs";
+import riseApi from "@api";
+import { User } from "@services/models";
+import { Debug } from "utils";
 
 interface SignUpProps extends IBaseScreenProps<"SignIn"> {}
 
@@ -49,7 +54,8 @@ const SignIn: React.FC<SignUpProps> = () => {
 
   const colors = theme.colors as typeof palette;
   const [show, setShow] = useState(false);
-  const { addItemToRequest } = useBoundStore();
+  const [loading, setLoading] = useState(false);
+  const { setUser } = useBoundStore();
   const { control, handleSubmit, formState } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -59,9 +65,36 @@ const SignIn: React.FC<SignUpProps> = () => {
   });
 
   const onSubmit = (values: { email: string; password: string }) => {
-    console.log(values);
-    addItemToRequest(values);
-    NavigationService.resetHard(SCREENS.SET_PIN);
+    Debug.log(values);
+    setLoading(true);
+    const response$ = from(
+      riseApi.login(
+        {},
+        {},
+        {
+          email_address: values.email,
+          password: values.password,
+        },
+      ),
+    );
+    response$.subscribe({
+      next: (res) => {
+        if (res.code === 200 || res.code === 201) {
+          Debug.log(res.data);
+          setUser(res.data as User);
+          riseApi.setToken((res.data as any).token || "");
+          NavigationService.resetHard(SCREENS.HOME);
+        } else {
+          Alert.alert(
+            "Error",
+            res.errorData?.message || "Something Went wrong",
+          );
+        }
+      },
+      complete: () => {
+        setLoading(false);
+      },
+    });
   };
 
   return (
@@ -151,6 +184,7 @@ const SignIn: React.FC<SignUpProps> = () => {
           </Box>
         </Box>
       </KeyboardAwareScrollView>
+      {loading && <Loader />}
     </Page>
   );
 };
